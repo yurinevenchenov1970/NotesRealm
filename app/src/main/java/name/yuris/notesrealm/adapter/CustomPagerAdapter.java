@@ -41,4 +41,14 @@ public class CustomPagerAdapter extends FragmentStatePagerAdapter {
         mFragmentList.add(fragment);
         notifyDataSetChanged();
     }
+    
+    public void addFragments(List<BasicFragment> fragments) {
+        mFragmentList.addAll(fragments);
+        notifyDataSetChanged();
+    }
+
+    public void clear() {
+        mFragmentList = null;
+        mFragmentList = new ArrayList<>();
+    }
 }
