@@ -5,4 +5,7 @@
     <string name="are_you_sure">Вы уверены?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
+    <string name="input_category_name">Введите название категории</string>
+    <string name="create">Создать</string>
+    <string name="cancel">Отмена</string>
 </resources>

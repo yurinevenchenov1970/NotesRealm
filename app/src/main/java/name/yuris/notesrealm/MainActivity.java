@@ -10,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import name.yuris.notesrealm.model.Category;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int CATEGORY_NAME_MIN_LENGTH = 3;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -51,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-                case android.R.id.home:
-                        closeApp();
-                        return true;
-                case R.id.new_category:
-                        addNewCategory();
-                        return true;
-            }
+            case android.R.id.home:
+                closeApp();
+                return true;
+            case R.id.new_category:
+                addNewCategory();
+                return true;
+        }
         return false;
     }
 
@@ -93,40 +97,74 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNewCategory() {
-        String categoryName = "Title " + mCount++;
-        mRealm.beginTransaction();
-        Category category = mRealm.createObject(Category.class);
-        category.setCategoryName(categoryName);
-        mRealm.commitTransaction();
-        fullAdapter();
+        LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.create_dialog, null);
+        final EditText editText = (EditText) view.findViewById(R.id.input_category_edit_text);
+        new AlertDialog.Builder(this)
+                        .setTitle(R.string.input_category_name)
+                        .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                                if (editText.getText().length() >= CATEGORY_NAME_MIN_LENGTH) {
+                                        saveCategoryName(editText.getText().toString().toLowerCase());
+                                        fullAdapter();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Минимум " + CATEGORY_NAME_MIN_LENGTH + " символов", Toast.LENGTH_LONG).show();
+                                    }
+                            }
+                })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                })
+                        .setView(view)
+                        .show();
+    }
+
+    private void saveCategoryName(String categoryName) {
+        boolean contains = false;
+        for (Category category : mRealm.allObjects(Category.class)) {
+                if (category.getCategoryName().equals(categoryName)) {
+                        contains = true;
+                    }
+            }
+        if (contains) {
+                Toast.makeText(getApplicationContext(), categoryName + " уже содержится", Toast.LENGTH_LONG).show();
+            } else {
+                mRealm.beginTransaction();
+                Category category = mRealm.createObject(Category.class);
+                category.setCategoryName(categoryName);
+                mRealm.commitTransaction();
+            }
     }
 
     private void fullAdapter() {
         mAdapter.clear();
         List<BasicFragment> fragments = new ArrayList<>();
         for (Category category : mRealm.allObjects(Category.class)) {
-            fragments.add(BasicFragment.newInstance(category.getCategoryName()));
-            }
+            fragments.add(BasicFragment.newInstance().setTitle(category.getCategoryName()));
+        }
         mAdapter.addFragments(fragments);
         mViewPager.setAdapter(mAdapter);
     }
 
     private void closeApp() {
         new AlertDialog.Builder(this)
-                        .setTitle(R.string.exit_app)
-                        .setMessage(R.string.are_you_sure)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.exit_app)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
+                        finish();
+                    }
                 })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                        dialog.dismiss();
+                    }
                 })
-                        .show();
+                .show();
     }
 }
