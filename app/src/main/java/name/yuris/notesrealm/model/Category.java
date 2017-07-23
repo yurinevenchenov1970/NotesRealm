@@ -1,5 +1,6 @@
 package name.yuris.notesrealm.model;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
 
 /**
@@ -9,6 +10,7 @@ import io.realm.RealmObject;
 public class Category extends RealmObject {
 
     private String categoryName;
+    private RealmList<Note> notes;
 
     public Category() {
         //Empty constructor needed by Realm.
@@ -20,5 +22,13 @@ public class Category extends RealmObject {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public RealmList<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(RealmList<Note> notes) {
+        this.notes = notes;
     }
 }
