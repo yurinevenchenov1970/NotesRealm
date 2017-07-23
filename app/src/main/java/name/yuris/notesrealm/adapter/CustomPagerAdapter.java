@@ -37,11 +37,6 @@ public class CustomPagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentList.get(position).getTitle();
     }
 
-    public void addFragment(BasicFragment fragment) {
-        mFragmentList.add(fragment);
-        notifyDataSetChanged();
-    }
-    
     public void addFragments(List<BasicFragment> fragments) {
         mFragmentList.addAll(fragments);
         notifyDataSetChanged();

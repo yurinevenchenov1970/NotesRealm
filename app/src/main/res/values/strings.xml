@@ -8,4 +8,5 @@
     <string name="input_category_name">Введите название категории</string>
     <string name="create">Создать</string>
     <string name="cancel">Отмена</string>
+    <string name="create_note_questioner">Создать заметку?</string>
 </resources>

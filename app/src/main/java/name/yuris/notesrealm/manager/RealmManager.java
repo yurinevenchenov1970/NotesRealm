@@ -14,7 +14,8 @@ public class RealmManager {
     public RealmManager(Context context) {
         mRealm = Realm.getInstance(
                         new RealmConfiguration.Builder(context)
-                                .name("notesRealm.realm")
+                        .name("notesRealm.realm")
+                        .deleteRealmIfMigrationNeeded()
                         .build());
     }
 
