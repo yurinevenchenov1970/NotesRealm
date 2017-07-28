@@ -2,5 +2,6 @@
 <resources>
     <dimen name="margin_xsmall">8dp</dimen>
     <dimen name="padding_xsmall">4dp</dimen>
+    <dimen name="padding_medium">16dp</dimen>
     <dimen name="divider_height">2dp</dimen>
 </resources>

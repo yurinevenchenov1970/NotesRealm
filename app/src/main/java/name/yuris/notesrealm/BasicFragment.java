@@ -1,7 +1,7 @@
 package name.yuris.notesrealm;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,15 +10,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+
 import name.yuris.notesrealm.adapter.NoteAdapter;
 import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
 import name.yuris.notesrealm.model.Note;
+import name.yuris.notesrealm.ui.CreateNoteActivity;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * @author Yuri Nevenchenov on 7/18/2017.
@@ -59,16 +62,24 @@ public class BasicFragment extends Fragment {
         mAddNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v, getString(R.string.create_note_questioner), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.yes, new View.OnClickListener(){
+                Snackbar.make(v, getString(R.string.create_note_question), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.yes, new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO: 7/23/2017 go to new Activity to create note
-                                Toast.makeText(getContext(), "Переход на новую активити", Toast.LENGTH_LONG).show();
+                                startActivityForResult(CreateNoteActivity.createExplicitIntent(getContext(), mTitle), 1);
                             }
                         }).show();
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                mAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     public String getTitle() {
@@ -80,15 +91,14 @@ public class BasicFragment extends Fragment {
         return this;
     }
 
-    public RealmList<Note> getNotesRealm() {
+    private RealmList<Note> getNotesRealm() {
         RealmList<Note> noteList = null;
-        for (Category category : mRealm.allObjects(Category.class)){
-            if(category.getCategoryName().equals(mTitle)) {
+        for (Category category : mRealm.allObjects(Category.class)) {
+            if (category.getCategoryName().equals(mTitle)) {
                 noteList = category.getNotes();
                 break;
             }
         }
         return noteList;
     }
-
 }
