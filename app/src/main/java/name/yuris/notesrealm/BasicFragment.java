@@ -20,6 +20,7 @@ import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
 import name.yuris.notesrealm.model.Note;
 import name.yuris.notesrealm.ui.CreateNoteActivity;
+import name.yuris.notesrealm.ui.NoteDetailActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -27,7 +28,7 @@ import static android.app.Activity.RESULT_OK;
  * @author Yuri Nevenchenov on 7/18/2017.
  */
 
-public class BasicFragment extends Fragment {
+public class BasicFragment extends Fragment implements NoteAdapter.NoteClickListener{
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mAddNoteButton;
@@ -43,7 +44,7 @@ public class BasicFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mRealm = new RealmManager(getContext()).getRealm();
-        mAdapter = new NoteAdapter(getNotesRealm());
+        mAdapter = new NoteAdapter(this, getNotesRealm());
     }
 
     @Nullable
@@ -82,6 +83,16 @@ public class BasicFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onClick(int position) {
+        Note note = getNotesRealm().get(position);
+        startActivityForResult(NoteDetailActivity.createExplicitIntent(getContext(),
+                mTitle,
+                note.getTitle(),
+                note.getId(),
+                note.getBody()), 1);
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -101,4 +112,5 @@ public class BasicFragment extends Fragment {
         }
         return noteList;
     }
+
 }

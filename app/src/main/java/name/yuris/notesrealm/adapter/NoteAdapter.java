@@ -19,10 +19,13 @@ import name.yuris.notesrealm.model.Note;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
 
+    private final NoteClickListener mNoteClickListener;
     private RealmList<Note> mNoteList;
 
-    public NoteAdapter(RealmList<Note> noteList) {
+    public NoteAdapter(NoteClickListener clickListener,
+                       RealmList<Note> noteList) {
         mNoteList = noteList;
+        mNoteClickListener = clickListener;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(NoteAdapter.ViewHolder holder, int position) {
         Note note = mNoteList.get(position);
-        holder.idTextViev.setText(note.getId());
+        holder.idTextView.setText(note.getId());
         holder.titleTextView.setText(note.getTitle());
     }
 
@@ -43,17 +46,25 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
         return mNoteList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.title_text_view)
-        TextView titleTextView;
-
-        @BindView(R.id.id_text_view)
-        TextView idTextViev;
+        private TextView titleTextView;
+        private TextView idTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+            titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
+            idTextView = (TextView) itemView.findViewById(R.id.id_text_view);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            mNoteClickListener.onClick(getLayoutPosition());
+        }
+    }
+
+    public interface NoteClickListener {
+            void onClick(int position);
     }
 }

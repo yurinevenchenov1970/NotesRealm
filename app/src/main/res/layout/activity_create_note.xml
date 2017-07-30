@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/padding_medium"
     tools:context="name.yuris.notesrealm.ui.CreateNoteActivity">
 
     <android.support.v7.widget.Toolbar
@@ -19,6 +18,7 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <android.support.design.widget.TextInputLayout
+        android:padding="@dimen/padding_medium"
         android:id="@+id/title_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +33,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
+        android:padding="@dimen/padding_medium"
         android:id="@+id/body_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
