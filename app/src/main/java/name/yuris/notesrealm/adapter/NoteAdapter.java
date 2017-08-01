@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.realm.RealmList;
 import name.yuris.notesrealm.R;
 import name.yuris.notesrealm.model.Note;
@@ -17,7 +15,7 @@ import name.yuris.notesrealm.model.Note;
  * @author Yuri Nevenchenov on 7/23/2017.
  */
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     private final NoteClickListener mNoteClickListener;
     private RealmList<Note> mNoteList;
@@ -46,7 +44,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
         return mNoteList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView titleTextView;
         private TextView idTextView;
@@ -65,6 +63,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder>{
     }
 
     public interface NoteClickListener {
-            void onClick(int position);
+        void onClick(int position);
     }
 }

@@ -2,10 +2,10 @@ package name.yuris.notesrealm.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +16,12 @@ import name.yuris.notesrealm.R;
 import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
 import name.yuris.notesrealm.model.Note;
+
+/**
+ * Activity to show note details
+ *
+ * @author Yuri Nevenchenov
+ */
 
 public class NoteDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +41,8 @@ public class NoteDetailActivity extends AppCompatActivity implements View.OnClic
     private String mNoteTitle;
     private String mNoteId;
     private String mNoteBody;
+
+    private boolean mNoteEdited;
 
     private Realm mRealm;
 
@@ -63,10 +71,15 @@ public class NoteDetailActivity extends AppCompatActivity implements View.OnClic
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            finishActivity();
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishActivity();
     }
 
     @Override
@@ -74,17 +87,43 @@ public class NoteDetailActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.delete_note_button:
                 Snackbar.make(v, R.string.delete_note_question, Snackbar.LENGTH_LONG)
-                        .setAction(R.string.yes, new View.OnClickListener(){
+                        .setAction(R.string.yes, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 deleteNote();
                             }
                         }).show();
-
                 break;
             case R.id.edit_note_button:
-                // TODO: 7/30/2017 edit button;
+                Snackbar.make(v, R.string.edit_note_question, Snackbar.LENGTH_LONG)
+                        .setAction(R.string.yes, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                editNote();
+                            }
+                        }).show();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                mNoteTitleTextView.setText(data.getStringExtra(EXTRA_NOTE_TITLE));
+                mNoteBodyTextView.setText(data.getStringExtra(EXTRA_NOTE_BODY));
+                mNoteEdited = true;
+            }
+        }
+    }
+
+    //region private methods
+
+    private void finishActivity() {
+        if (mNoteEdited) {
+            finishWithResultOk();
+        } else {
+            finish();
         }
     }
 
@@ -140,4 +179,12 @@ public class NoteDetailActivity extends AppCompatActivity implements View.OnClic
         setResult(RESULT_OK, intent);
         finish();
     }
+
+    private void editNote() {
+        startActivityForResult(EditNoteActivity.createExplicitIntent(getApplicationContext(),
+                mNoteTitle,
+                mNoteId,
+                mNoteBody), 2);
+    }
+    //endregion
 }

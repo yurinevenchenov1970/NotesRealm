@@ -15,6 +15,9 @@
     <string name="note_details">Просмотр заметки</string>
     <string name="close_activity">Выход без сохранения</string>
     <string name="lose_input_data">Введенные данные будут потеряны. Вы уверены, что хотите прервать создание заметки?</string>
+    <string name="lose_edit_input_data">Введенные данные будут потеряны. Вы уверены, что хотите прервать редактирование заметки?</string>
     <string name="save_note_question">Сохранить заметку?</string>
     <string name="delete_note_question">Удалить заметку?</string>
+    <string name="edit_note_question">Редактировать заметку?</string>
+    <string name="edit_note">Редактирование заметки</string>
 </resources>

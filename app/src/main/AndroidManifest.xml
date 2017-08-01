@@ -30,6 +30,12 @@
             android:label="@string/note_details"
             android:theme="@style/Theme.Design.NoActionBar">
         </activity>
+        <activity
+            android:name=".ui.EditNoteActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/edit_note"
+            android:theme="@style/Theme.Design.NoActionBar"            >
+        </activity>
     </application>
 
 </manifest>

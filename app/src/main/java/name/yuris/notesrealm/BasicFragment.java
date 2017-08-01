@@ -10,11 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-
 import name.yuris.notesrealm.adapter.NoteAdapter;
 import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
@@ -28,7 +26,7 @@ import static android.app.Activity.RESULT_OK;
  * @author Yuri Nevenchenov on 7/18/2017.
  */
 
-public class BasicFragment extends Fragment implements NoteAdapter.NoteClickListener{
+public class BasicFragment extends Fragment implements NoteAdapter.NoteClickListener {
 
     private RecyclerView mRecyclerView;
     private FloatingActionButton mAddNoteButton;
