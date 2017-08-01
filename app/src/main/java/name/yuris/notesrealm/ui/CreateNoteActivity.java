@@ -3,26 +3,17 @@ package name.yuris.notesrealm.ui;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.text.SimpleDateFormat;
 
 import io.realm.Realm;
 import name.yuris.notesrealm.R;
-import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
 import name.yuris.notesrealm.model.Note;
 
@@ -32,19 +23,7 @@ import name.yuris.notesrealm.model.Note;
  * @author Yuri Nevenchenov on 7/23/2017.
  */
 
-public class CreateNoteActivity extends AppCompatActivity {
-
-
-    private static final String EXTRA_CATEGORY_NAME = "extra_category_name";
-    private static final int INPUT_MIN_LENGTH = 3;
-
-    private Toolbar mToolbar;
-    private TextInputEditText mTitleEditText;
-    private TextInputEditText mBodyEditText;
-    private FloatingActionButton mCreateNoteButton;
-
-    private Realm mRealm;
-    private String mCategoryName;
+public class CreateNoteActivity extends BaseNoteActivity {
 
     public static Intent createExplicitIntent(Context context, String categoryName) {
         Intent intent = new Intent(context, CreateNoteActivity.class);
@@ -52,37 +31,15 @@ public class CreateNoteActivity extends AppCompatActivity {
         return intent;
     }
 
-    //region Activity LifeCycle
+    //region protected methods
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_note);
-        initUI();
-        mRealm = new RealmManager(this).getRealm();
-        mCategoryName = getIntent().getExtras().getString(EXTRA_CATEGORY_NAME);
+    protected int getNoteIdVisibility() {
+        return View.GONE;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            closeActivity();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        closeActivity();
-    }
-
-    //endregion
-
-    //region private methods
-
-
-    public void closeActivity() {
+    protected void handleActivityClosing() {
         if (inputDataEmpty()) {
             finish();
         } else {
@@ -105,36 +62,23 @@ public class CreateNoteActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void getDataFromIntent() {
+        mCategoryName = getIntent().getExtras().getString(EXTRA_CATEGORY_NAME);
+    }
+
+    @Override
+    protected void onMainButtonClick(View view) {
+        saveNote(view);
+    }
+
+    //endregion
+
+    //region private methods
+
     private boolean inputDataEmpty() {
         return mTitleEditText.getText().length() == 0 &&
                 mBodyEditText.getText().length() == 0;
-    }
-
-    private void initUI() {
-        initToolbar();
-        initInputs();
-        initButton();
-    }
-
-    private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void initInputs() {
-        mTitleEditText = (TextInputEditText) findViewById(R.id.title_edit_text);
-        mBodyEditText = (TextInputEditText) findViewById(R.id.body_edit_text);
-    }
-
-    private void initButton() {
-        mCreateNoteButton = (FloatingActionButton) findViewById(R.id.create_note_button);
-        mCreateNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveNote(view);
-            }
-        });
     }
 
     private void saveNote(View view) {

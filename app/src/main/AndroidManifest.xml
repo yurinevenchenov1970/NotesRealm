@@ -34,7 +34,7 @@
             android:name=".ui.EditNoteActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/edit_note"
-            android:theme="@style/Theme.Design.NoActionBar"            >
+            android:theme="@style/Theme.Design.NoActionBar">
         </activity>
     </application>
 

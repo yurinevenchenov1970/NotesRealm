@@ -4,47 +4,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import io.realm.Realm;
 import name.yuris.notesrealm.R;
-import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Note;
 
 /**
  * Activity to edit note {@link Note}
  *
- * @author Yuri Nevenchenov on 7/31/2017.
+ * @author Yuri Nevenchenov on 8/1/2017.
  */
 
-public class EditNoteActivity extends AppCompatActivity {
-
-    private static final int INPUT_MIN_LENGTH = 3;
-
-    private static final String EXTRA_NOTE_TITLE = "extra_note_title";
-    private static final String EXTRA_NOTE_ID = "extra_note_id";
-    private static final String EXTRA_NOTE_BODY = "extra_note_body";
-
-    private Toolbar mToolbar;
-    private TextInputEditText mTitleEditText;
-    private TextInputEditText mBodyEditText;
-    private TextView mIdTextView;
-    private FloatingActionButton mSaveButton;
-
-    private String mNoteTitle;
-    private String mNoteId;
-    private String mNoteBody;
-
-    private Realm mRealm;
+public class EditNoteActivity extends BaseNoteActivity {
 
     public static Intent createExplicitIntent(Context context,
                                               String noteTitle,
@@ -60,29 +35,11 @@ public class EditNoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_note);
-        mRealm = new RealmManager(this).getRealm();
-        getDataFromIntent();
-        initUI();
+        fillUIData();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            closeActivity();
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        closeActivity();
-    }
-
-    //region private methods
-
-    private void closeActivity() {
+    protected void handleActivityClosing() {
         if (dataWasNotChanged()) {
             finish();
         } else {
@@ -105,12 +62,18 @@ public class EditNoteActivity extends AppCompatActivity {
         }
     }
 
-    private boolean dataWasNotChanged() {
-        return mNoteTitle.equals(mTitleEditText.getText().toString()) &&
-                mNoteBody.equals(mBodyEditText.getText().toString());
+    @Override
+    protected void onMainButtonClick(View view) {
+        if (dataWasNotChanged()) {
+            finish();
+        } else if (inputDataCorrect()) {
+            showSnackBar(view);
+        } else {
+            showErrorMessage();
+        }
     }
 
-    private void getDataFromIntent() {
+    protected void getDataFromIntent() {
         Bundle bundle = getIntent().getExtras();
 
         mNoteTitle = bundle.getString(EXTRA_NOTE_TITLE);
@@ -118,43 +81,17 @@ public class EditNoteActivity extends AppCompatActivity {
         mNoteBody = bundle.getString(EXTRA_NOTE_BODY);
     }
 
-    private void initUI() {
-        initToolbar();
-        initViews();
-        initButton();
+    //region private methods
+
+    private boolean dataWasNotChanged() {
+        return mNoteTitle.equals(mTitleEditText.getText().toString()) &&
+                mNoteBody.equals(mBodyEditText.getText().toString());
     }
 
-
-    private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void initViews() {
-        mTitleEditText = (TextInputEditText) findViewById(R.id.title_edit_text);
-        mBodyEditText = (TextInputEditText) findViewById(R.id.body_edit_text);
-        mIdTextView = (TextView) findViewById(R.id.id_text_view);
-
+    private void fillUIData() {
         mTitleEditText.setText(mNoteTitle);
         mBodyEditText.setText(mNoteBody);
-        mIdTextView.setText(mNoteId);
-    }
-
-    private void initButton() {
-        mSaveButton = (FloatingActionButton) findViewById(R.id.save_note_button);
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (dataWasNotChanged()) {
-                    finish();
-                } else if (inputDataCorrect()) {
-                    showSnackBar(v);
-                } else {
-                    showErrorMessage();
-                }
-            }
-        });
+        mNoteIdTextView.setText(mNoteId);
     }
 
     private void showSnackBar(View view) {
