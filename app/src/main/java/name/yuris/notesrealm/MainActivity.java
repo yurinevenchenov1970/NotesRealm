@@ -1,11 +1,11 @@
 package name.yuris.notesrealm;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,8 +17,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.Realm;
-
 import name.yuris.notesrealm.adapter.CustomPagerAdapter;
 import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
@@ -26,19 +27,27 @@ import name.yuris.notesrealm.model.Category;
 public class MainActivity extends AppCompatActivity {
 
     private static final int CATEGORY_NAME_MIN_LENGTH = 3;
-    private Toolbar mToolbar;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
+
+    @BindView(R.id.tab_layout)
+    TabLayout mTabLayout;
+
+
     private CustomPagerAdapter mAdapter;
     private Realm mRealm;
 
-    private int mCount = 0;
-
     //region Activity LifeCycle
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initUI();
         mAdapter = new CustomPagerAdapter(getSupportFragmentManager());
         mRealm = new RealmManager(this).getRealm();
@@ -75,24 +84,9 @@ public class MainActivity extends AppCompatActivity {
     //region private methods
 
     private void initUI() {
-        initToolbar();
-        initViewPager();
-        initTabLayout();
-    }
-
-    private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    private void initViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(mAdapter);
-    }
-
-    private void initTabLayout() {
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -100,43 +94,43 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout view = (LinearLayout) getLayoutInflater().inflate(R.layout.create_dialog, null);
         final EditText editText = (EditText) view.findViewById(R.id.input_category_edit_text);
         new AlertDialog.Builder(this)
-                        .setTitle(R.string.input_category_name)
-                        .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.input_category_name)
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                if (editText.getText().length() >= CATEGORY_NAME_MIN_LENGTH) {
-                                        saveCategoryName(editText.getText().toString().toLowerCase());
-                                        fullAdapter();
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), "Минимум " + CATEGORY_NAME_MIN_LENGTH + " символов", Toast.LENGTH_LONG).show();
-                                    }
-                            }
+                        if (editText.getText().length() >= CATEGORY_NAME_MIN_LENGTH) {
+                            saveCategoryName(editText.getText().toString().toLowerCase());
+                            fullAdapter();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Минимум " + CATEGORY_NAME_MIN_LENGTH + " символов", Toast.LENGTH_LONG).show();
+                        }
+                    }
                 })
-                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                        dialog.dismiss();
+                    }
                 })
-                        .setView(view)
-                        .show();
+                .setView(view)
+                .show();
     }
 
     private void saveCategoryName(String categoryName) {
         boolean contains = false;
         for (Category category : mRealm.allObjects(Category.class)) {
-                if (category.getCategoryName().equals(categoryName)) {
-                        contains = true;
-                    }
+            if (category.getCategoryName().equals(categoryName)) {
+                contains = true;
             }
+        }
         if (contains) {
-                Toast.makeText(getApplicationContext(), categoryName + " уже содержится", Toast.LENGTH_LONG).show();
-            } else {
-                mRealm.beginTransaction();
-                Category category = mRealm.createObject(Category.class);
-                category.setCategoryName(categoryName);
-                mRealm.commitTransaction();
-            }
+            Toast.makeText(getApplicationContext(), categoryName + " уже содержится", Toast.LENGTH_LONG).show();
+        } else {
+            mRealm.beginTransaction();
+            Category category = mRealm.createObject(Category.class);
+            category.setCategoryName(categoryName);
+            mRealm.commitTransaction();
+        }
     }
 
     private void fullAdapter() {
@@ -167,4 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
     }
+
+    //endregion
 }

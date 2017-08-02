@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.realm.RealmList;
 import name.yuris.notesrealm.R;
 import name.yuris.notesrealm.model.Note;
@@ -46,13 +48,15 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView titleTextView;
-        private TextView idTextView;
+        @BindView(R.id.title_text_view)
+        TextView titleTextView;
+
+        @BindView(R.id.id_text_view)
+        TextView idTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titleTextView = (TextView) itemView.findViewById(R.id.title_text_view);
-            idTextView = (TextView) itemView.findViewById(R.id.id_text_view);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 

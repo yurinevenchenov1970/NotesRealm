@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NotesRealm</string>
+    <string name="app_name">Make Notes</string>
     <string name="add_category">Добавить категорию</string>
     <string name="exit_app">Выход из приложения</string>
     <string name="are_you_sure">Вы уверены?</string>

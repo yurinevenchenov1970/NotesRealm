@@ -4,10 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import name.yuris.notesrealm.BasicFragment;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import name.yuris.notesrealm.BasicFragment;
 
 /**
  * @author Yuri Nevenchenov on 7/18/2017.

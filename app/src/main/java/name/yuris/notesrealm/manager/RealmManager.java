@@ -1,6 +1,7 @@
 package name.yuris.notesrealm.manager;
 
 import android.content.Context;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 

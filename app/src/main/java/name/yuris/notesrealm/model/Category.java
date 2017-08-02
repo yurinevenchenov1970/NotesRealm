@@ -14,7 +14,7 @@ public class Category extends RealmObject {
 
     public Category() {
         //Empty constructor needed by Realm.
-            }
+    }
 
     public String getCategoryName() {
         return categoryName;

@@ -34,6 +34,8 @@ public class NoteDetailActivity extends BaseNoteActivity {
         return intent;
     }
 
+    //region protected methods
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,7 @@ public class NoteDetailActivity extends BaseNoteActivity {
     }
 
     @Override
-    protected int getMainButtonImageResource(){
+    protected int getMainButtonImageResource() {
         return android.R.drawable.ic_menu_edit;
     }
 
@@ -107,6 +109,8 @@ public class NoteDetailActivity extends BaseNoteActivity {
         mNoteId = bundle.getString(EXTRA_NOTE_ID);
         mNoteBody = bundle.getString(EXTRA_NOTE_BODY);
     }
+
+    //endregion
 
     //region private methods
 
