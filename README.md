@@ -5,7 +5,7 @@ This app's name is Make Notes.
 
 
 It gives a possibility to create categories and notes within the categories.
-User can edit and delete notes. Have a look at followed screencast to get an idea how does it work:
+User can edit and delete notes and categories. Have a look at followed screencast to get an idea how does it work:
 
 
 
