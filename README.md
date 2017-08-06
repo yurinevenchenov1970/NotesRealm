@@ -24,9 +24,9 @@ Here is a list of used libraries:
 
 
 
-Realm (https://github.com/realm/realm-java) Realm is a mobile database that runs directly inside phones, tablets or wearables.
+Realm (https://github.com/realm/realm-java) is a mobile database that runs directly inside phones, tablets or wearables.
 
 
 
 
-ButterKnife (https://github.com/codepath/android_guides/wiki/Reducing-View-Boilerplate-with-Butterknife). Using Java annotations, makes Android development better by simplifying common tasks.
+ButterKnife (https://github.com/codepath/android_guides/wiki/Reducing-View-Boilerplate-with-Butterknife) using Java annotations, makes Android development better by simplifying common tasks.
