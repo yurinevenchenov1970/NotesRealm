@@ -10,7 +10,7 @@ User can edit and delete notes. Have a look at followed screencast to get an ide
 
 
 
-  ![howdoesitworks](https://user-images.githubusercontent.com/29121233/28884087-3a16f194-77b9-11e7-9fd6-d755a4058c2e.gif)
+![howdoesitworks](https://user-images.githubusercontent.com/29121233/29003023-c48cc866-7ab7-11e7-878a-22b28b288cf5.gif)
   
   
   
