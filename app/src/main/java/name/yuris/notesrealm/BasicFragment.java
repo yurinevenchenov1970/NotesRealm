@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -65,18 +66,6 @@ public class BasicFragment extends Fragment implements NoteAdapter.NoteClickList
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setAdapter(mAdapter);
-        mAddNoteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, getString(R.string.create_note_question), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.yes, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivityForResult(CreateNoteActivity.createExplicitIntent(getContext(), mTitle), 1);
-                            }
-                        }).show();
-            }
-        });
     }
 
     @Override
@@ -102,6 +91,17 @@ public class BasicFragment extends Fragment implements NoteAdapter.NoteClickList
                 note.getTitle(),
                 note.getId(),
                 note.getBody()), 1);
+    }
+
+    @OnClick(R.id.add_note_button)
+    public void onClick(View v) {
+        Snackbar.make(v, getString(R.string.create_note_question), Snackbar.LENGTH_LONG)
+                .setAction(R.string.yes, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivityForResult(CreateNoteActivity.createExplicitIntent(getContext(), mTitle), 1);
+                    }
+                }).show();
     }
 
     public String getTitle() {

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
+import io.realm.RealmResults;
 import name.yuris.notesrealm.adapter.CustomPagerAdapter;
 import name.yuris.notesrealm.manager.RealmManager;
 import name.yuris.notesrealm.model.Category;
@@ -36,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
-
 
     private CustomPagerAdapter mAdapter;
     private Realm mRealm;
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         for (Category category : mRealm.allObjects(Category.class)) {
             if (category.getCategoryName().equals(categoryName)) {
                 contains = true;
+                break;
             }
         }
         if (contains) {
@@ -141,6 +143,53 @@ public class MainActivity extends AppCompatActivity {
         }
         mAdapter.addFragments(fragments);
         mViewPager.setAdapter(mAdapter);
+        setTabsLongClickListener();
+    }
+
+    private void setTabsLongClickListener() {
+        LinearLayout tabStrip = (LinearLayout) mTabLayout.getChildAt(0);
+        for (int i = 0; i < tabStrip.getChildCount(); i++) {
+            final int index = i;
+            tabStrip.getChildAt(i).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    deleteTabAt(index);
+                    return false;
+                }
+            });
+        }
+    }
+
+    private void deleteTabAt(final int position) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_category)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteCategoryAtPosition(position);
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    private void deleteCategoryAtPosition(final int position) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<Category> rows = realm.where(Category.class)
+                        .equalTo("categoryName", mRealm.allObjects(Category.class)
+                                .get(position).getCategoryName()).findAll();
+                rows.clear();
+            }
+        });
+        fullAdapter();
     }
 
     private void closeApp() {

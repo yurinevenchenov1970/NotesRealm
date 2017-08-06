@@ -16,7 +16,6 @@ public class RealmManager {
         mRealm = Realm.getInstance(
                         new RealmConfiguration.Builder(context)
                         .name("notesRealm.realm")
-                        .deleteRealmIfMigrationNeeded()
                         .build());
     }
 

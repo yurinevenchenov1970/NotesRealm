@@ -20,4 +20,5 @@
     <string name="delete_note_question">Удалить заметку?</string>
     <string name="edit_note_question">Редактировать заметку?</string>
     <string name="edit_note">Редактирование заметки</string>
+    <string name="delete_category">Удалить категорию?</string>
 </resources>
